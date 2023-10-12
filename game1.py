@@ -1,6 +1,5 @@
 import pygame
 import sys
-import random
 
 #Initialize Pygame:
 pygame.init()
@@ -38,24 +37,19 @@ def draw_background(screen):
     #draw the sandy bottom
     for x in range(0, screen_width, tile_size):
         screen.blit(sand, (x,screen_height-tile_size))
-    #draw seagrass
-    for _ in range(7):
-        x=random.randint(0,screen_width)
-        screen.blit(seagrass, (x,screen_height-tile_size*2))
 
-#MAIN LOOP
-running=True
-background= screen.copy()
-draw_background(background)
+    #MAIN LOOP
+    running=True
+    background= screen.copy()
+    draw_background(background)
 
-while running:
-    for event in pygame.event.get():
-        if event.type == pygame.quit:
-            running = False
+    while running:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
         #DRAW BACKGROUND
-    screen.blit(background, (0,0))
-
-    pygame.display.flip()
+        screen.blit(background, (0,0))
+        pygame.display.flip()
 
 pygame.quit()
 
