@@ -39,17 +39,17 @@ def draw_background(screen):
         screen.blit(sand, (x,screen_height-tile_size))
 
     #MAIN LOOP
-    running=True
-    background= screen.copy()
-    draw_background(background)
+running=True
+background= screen.copy()
+draw_background(background)
 
-    while running:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                running = False
+while running:
+    for event in pygame.event.get():
+        if event.type == pygame.quit:
+            running = False
         #DRAW BACKGROUND
-        screen.blit(background, (0,0))
-        pygame.display.flip()
+    screen.blit(background, (0,0))
+    pygame.display.flip()
 
 pygame.quit()
 
