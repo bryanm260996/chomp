@@ -1,6 +1,7 @@
 import pygame
 import sys
 import random
+from fish import Fish, fishes
 
 #Initialize Pygame:
 pygame.init()
@@ -44,17 +45,17 @@ def draw_background(surf):
     text= custom_font.render('CHOMP',True, (255,0,0))
     surf.blit(text, (((screen_width/2)-tile_size*2) , (screen_height/2)-tile_size*3.5))
 
-from fish import fish, fishes
+
 
 running=True
 background= screen.copy()
 draw_background(background)
 
 for _ in range(5):
-    fishes.add(fish(random.randint(0, screen_width - tile_size), random.randint(0, screen_height - tile_size * 2)))
+    fishes.add(Fish(random.randint(0, screen_width - tile_size), random.randint(0, screen_height - tile_size * 2)))
 while running:
     for event in pygame.event.get():
-        if event.type == pygame.quit():
+        if event.type == pygame.QUIT:
             running=False
     screen.blit(background, (0,0))
     fishes.draw(background)

@@ -1,7 +1,7 @@
 # create a pygame sprite class for a fish
 import pygame
 
-class fish(pygame.sprite.Sprite):
+class Fish(pygame.sprite.Sprite):
     def __init__(self, x, y):
         super().__init__()
         self.image=green_fish=pygame.image.load('assets/sprites/green_fish.png').convert()
