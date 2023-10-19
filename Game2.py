@@ -44,19 +44,32 @@ def draw_background(surf):
     text= custom_font.render('CHOMP',True, (255,0,0))
     surf.blit(text, (((screen_width/2)-tile_size*2) , (screen_height/2)-tile_size*3.5))
 
-def draw_fishes(): 
+def draw_fishes(surf):
+    green_fish=pygame.image.load('assets/sprites/green_fish.png').convert()
+    green_fish.set_colorkey((0,0,0)) #set transparency
 
+    for _ in range (150):
+        x=random.randint(0,screen_width-tile_size)
+        y= random.randint(0,screen_height-tile_size*2)
+        surf.blit(green_fish,(x,y))
 
+def draw_inverted_fish(surf):
+    orange_fish_inverted = pygame.image.load('assets/sprites/orange_fish.png').convert()
+    orange_fish_inverted= pygame.transform.flip(orange_fish_inverted,True, False)
+    orange_fish_inverted.set_colorkey((0, 0, 0))  # set transparency
 
-
-
-
+    for _ in range(150):
+        x = random.randint(0, screen_width - tile_size)
+        y = random.randint(0, screen_height - tile_size * 2)
+        surf.blit(orange_fish_inverted, (x, y))
 
 
     #MAIN LOOP
 running=True
 background= screen.copy()
 draw_background(background)  #THIS 2 LINES OF CODE ARE TO CREATE A COPY OF THE ORIGINAL BACKGROUND
+draw_fishes(background)
+draw_inverted_fish(background)
 
 while running:
     for event in pygame.event.get():
