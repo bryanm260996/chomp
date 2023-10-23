@@ -52,7 +52,7 @@ background= screen.copy()
 draw_background(background)
 
 for _ in range(5):
-    fishes.add(Fish(random.randint(0, screen_width - tile_size), random.randint(0, screen_height - tile_size * 2)))
+    fishes.add(Fish(random.randint(screen_width, screen_width+tile_size), random.randint(0, screen_height - tile_size * 2)))
 while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:

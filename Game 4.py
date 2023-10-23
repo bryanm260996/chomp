@@ -1,6 +1,7 @@
 import pygame
 import sys
 import random
+from fish import Fish, fishes
 
 #Initialize Pygame:
 pygame.init()
@@ -14,10 +15,7 @@ tile_size=64
 screen= pygame.display.set_mode((screen_width, screen_height))
 pygame.display.set_caption('Beach')
 
-custom_font=pygame.font.Font('assets/fonts/DERSIRA.ttf', 80)
-
-#define function to draw background
-
+clock= pygame.time.Clock()
 def draw_background(surf):
     water= pygame.image.load('assets/sprites/water.png').convert() #CONVERT ALLOWS TO MAKE BACKGROUND TRANSPARENT
     sand=pygame.image.load('assets/sprites/sand_top (1).png').convert()
@@ -41,42 +39,37 @@ def draw_background(surf):
 
     #DRAW TEXT
 
+    custom_font = pygame.font.Font('assets/fonts/DERSIRA.ttf', 60)
     text= custom_font.render('CHOMP',True, (255,0,0))
     surf.blit(text, (((screen_width/2)-tile_size*2) , (screen_height/2)-tile_size*3.5))
 
-def draw_fishes(surf):
-    green_fish=pygame.image.load('assets/sprites/green_fish.png').convert()
-    green_fish.set_colorkey((0,0,0)) #set transparency
-
-    for _ in range (15):
-        x=random.randint(0,screen_width-tile_size)
-        y= random.randint(0,screen_height-tile_size*2)
-        surf.blit(green_fish,(x,y))
-
-def draw_inverted_fish(surf):
-    orange_fish_inverted = pygame.image.load('assets/sprites/orange_fish.png').convert()
-    orange_fish_inverted= pygame.transform.flip(orange_fish_inverted,True, False)
-    orange_fish_inverted.set_colorkey((0, 0, 0))  # set transparency
-
-    for _ in range(15):
-        x = random.randint(0, screen_width - tile_size)
-        y = random.randint(0, screen_height - tile_size * 2)
-        surf.blit(orange_fish_inverted, (x, y))
-
-
-    #MAIN LOOP
 running=True
 background= screen.copy()
-draw_background(background)  #THIS 2 LINES OF CODE ARE TO CREATE A COPY OF THE ORIGINAL BACKGROUND
-draw_fishes(background)
-draw_inverted_fish(background)
+draw_background(background)
+
+for _ in range(5):
+    fishes.add(Fish(random.randint(screen_width, screen_width*1.5), random.randint(0, screen_height - tile_size * 2)))
 
 while running:
     for event in pygame.event.get():
-        if event.type == pygame.quit:
-            running = False
-        #DRAW BACKGROUND
-    screen.blit(background, (0,0)) #THIS PASTES THE ENTIRE FUNCTION INTO THE ORIGINAL SCREEN, STARTING AT 0,0
+        if event.type == pygame.QUIT:
+            running=False
+    screen.blit(background, (0,0))
+
+    fishes.update()
+    #check if any fish is off screen
+    for fish in fishes:
+        if fish.rect.x < -fish.rect.width:
+            fishes.remove(fish)
+            fishes.add(Fish(random.randint(screen_width, screen_width + 50),
+                            random.randint(0, screen_height - tile_size * 2)))
+
+    fishes.draw(screen)
     pygame.display.flip()
+    clock.tick(150)
 
 pygame.quit()
+
+
+
+
