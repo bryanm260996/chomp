@@ -17,9 +17,9 @@ pygame.display.set_caption('Beach')
 
 clock= pygame.time.Clock()
 def draw_background(surf):
-    water= pygame.image.load('assets/sprites/water.png').convert() #CONVERT ALLOWS TO MAKE BACKGROUND TRANSPARENT
-    sand=pygame.image.load('assets/sprites/sand_top (1).png').convert()
-    seagrass=pygame.image.load('assets/sprites/seagrass.png').convert()
+    water= pygame.image.load('../assets/sprites/water.png').convert() #CONVERT ALLOWS TO MAKE BACKGROUND TRANSPARENT
+    sand=pygame.image.load('../assets/sprites/sand_top (1).png').convert()
+    seagrass=pygame.image.load('../assets/sprites/seagrass.png').convert()
 
     #use png transparency
     sand.set_colorkey((0,0,0))
@@ -39,7 +39,7 @@ def draw_background(surf):
 
     #DRAW TEXT
 
-    custom_font = pygame.font.Font('assets/fonts/DERSIRA.ttf', 60)
+    custom_font = pygame.font.Font('../assets/fonts/DERSIRA.ttf', 60)
     text= custom_font.render('CHOMP',True, (255,0,0))
     surf.blit(text, (((screen_width/2)-tile_size*2) , (screen_height/2)-tile_size*3.5))
 
