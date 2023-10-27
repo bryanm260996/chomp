@@ -24,6 +24,14 @@ for _ in range(10):
 #create a player fish
 player = Player(screen_width/2, screen_height/2)
 
+#initialize score
+score= 0
+score_font= pygame.font.Font('../assets/fonts/DERSIRA.ttf', 60)
+text= score_font.render(f'{score}',True, (255,0,0))
+
+#load sound effects
+scream= pygame.mixer.Sound('../assets/sounds/scream.wav')
+
 
 while running:
     for event in pygame.event.get():
@@ -50,7 +58,22 @@ while running:
     #DRAW GREEN FISH
     fishes.update()
     player.update()
-#check if any fish is off the screen
+
+    #check for player and green fish collisions
+
+    result=pygame.sprite.spritecollide(player, fishes, True)
+    #print(result)
+    if result: #if it is not empty
+        #play sound
+        pygame.mixer.Sound.play(scream)
+        score += len(result)
+        print(score)
+    # draw more green fish
+        for _ in range(len(result)):
+            fishes.add(Fish(random.randint(screen_width, screen_width * 1.5),
+                            random.randint(0, screen_height - tile_size * 2)))
+
+    #check if any fish is off the screen
     for fish in fishes:
         if fish.rect.x < -fish.rect.width:
             fishes.remove(fish)
@@ -60,6 +83,9 @@ while running:
     fishes.draw(screen)
 #draw player fish
     player.draw(screen)
+    # draw score on screen
+    text = score_font.render(f'{score}', True, (255, 0, 0))
+    screen.blit(text, (screen_width - tile_size, 0))
 
     pygame.display.flip()
     clock.tick(80)
