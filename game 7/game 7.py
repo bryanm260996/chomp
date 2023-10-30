@@ -4,8 +4,9 @@ import sys
 
 from game_parameters import *
 from fish import Fish, fishes
-from background import draw_background
+from background import draw_background, add_fish, add_enemies
 from player import Player
+from enemy import Enemy, enemies
 
 #initialize pygame
 pygame.init()
@@ -17,9 +18,14 @@ clock= pygame.time.Clock()
 running=True
 background= screen.copy()
 draw_background(background)
+# draw fish
+add_fish(5)
 
-for _ in range(400):
-    fishes.add(Fish(random.randint(screen_width, screen_width*1.5), random.randint(0, screen_height - tile_size * 2)))
+#for _ in range(400):
+    #fishes.add(Fish(random.randint(screen_width, screen_width*1.5), random.randint(0, screen_height - tile_size * 2)))
+
+#draw enemies
+add_enemies(5)
 
 #create a player fish
 player = Player(screen_width/2, screen_height/2)
@@ -58,6 +64,7 @@ while running:
     #DRAW GREEN FISH
     fishes.update()
     player.update()
+    enemies.update()
 
     #check for player and green fish collisions
 
@@ -69,18 +76,33 @@ while running:
         score += len(result)
         print(score)
     # draw more green fish
-        for _ in range(len(result)):
-            fishes.add(Fish(random.randint(screen_width, screen_width * 1.5),
-                            random.randint(0, screen_height - tile_size * 2)))
+        add_fish(len(result))
+        #for _ in range(len(result)):
+            #fishes.add(Fish(random.randint(screen_width, screen_width * 1.5),
+                            #random.randint(0, screen_height - tile_size * 2)))
+    result = pygame.sprite.spritecollide(player, enemies, True)
+    if result: #if it is not empty
+        #play sound
+        pygame.mixer.Sound.play(scream)
+        score -= len(result)
+        print(score)
+    # draw more  fish
+        add_enemies(len(result))
 
     #check if any fish is off the screen
     for fish in fishes:
         if fish.rect.x < -fish.rect.width:
             fishes.remove(fish)
-            fishes.add(Fish(random.randint(screen_width, screen_width + 50),
-                            random.randint(0, screen_height - tile_size * 2)))
+            add_fish(1)
+            #fishes.add(Fish(random.randint(screen_width, screen_width + 50),
+                            #random.randint(0, screen_height - tile_size * 2)))
+    for enemy in enemies:
+        if enemy.rect.x < -enemy.rect.width:
+            enemies.remove(enemy)
+            add_enemies(1)
 #draw green fish
     fishes.draw(screen)
+    enemies.draw(screen)
 #draw player fish
     player.draw(screen)
     # draw score on screen
