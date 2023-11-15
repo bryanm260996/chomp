@@ -4,7 +4,7 @@ import sys
 
 from game_parameters import *
 from healthy_food import Shake, shakes, Yogurt, yogurts
-from background import draw_background, add_shake, add_enemies, add_yogurt, add_enemies2, add_enemies3
+from background import draw_background, add_shake, add_enemies, add_yogurt, add_enemies2, add_enemies3,  draw_background2
 from player import Player
 from enemy import Enemy, enemies, enemies2, enemies3
 
@@ -12,13 +12,13 @@ from enemy import Enemy, enemies, enemies2, enemies3
 pygame.init()
 
 screen= pygame.display.set_mode((screen_width, screen_height))
-pygame.display.set_caption('adding a player fish on the screen')
+pygame.display.set_caption('adding a player on the screen')
 clock= pygame.time.Clock()
 
 running=True
 background= screen.copy()
 draw_background(background)
-# draw fish
+# draw items
 add_shake(1)
 add_yogurt(1)
 #draw enemies
@@ -26,22 +26,24 @@ add_enemies(1)
 add_enemies2(1)
 add_enemies3(1)
 
+
+
 #create a player
 player = Player(screen_width/2, screen_height/2)
 
 #initialize score
-score= 10
+score= 0
+
 score_font= pygame.font.Font('../assets/fonts/DERSIRA.ttf', 50)
 text= score_font.render(f'{score}',True, (255,0,0))
-if score <10:
-    score_font = pygame.font.Font('../assets/fonts/DERSIRA.ttf', 50)
-    text = score_font.render(f'{score}', True, (255, 0, 0))
+fast_font=pygame.font.Font('../assets/fonts/DERSIRA.ttf', 40)
+
 
 #load sound effects
 eat_sound= pygame.mixer.Sound('../assets/sounds/chomp.wav')
 ew_sound=pygame.mixer.Sound('../assets/sounds/MITCH.wav')
-
-while running:
+lives= 1
+while lives > 0 and running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running=False
@@ -68,6 +70,8 @@ while running:
     yogurts.update()
     enemies2.update()
     enemies3.update()
+
+
 
     #check for player collisions with items
 
@@ -99,8 +103,9 @@ while running:
         #play sound
         pygame.mixer.Sound.play(ew_sound)
         score -= 1
+        lives -=1
         print(score)
-    # draw more  fish
+    # draw more  enemies
         add_enemies(len(result))
         player.image=player.hurt
 
@@ -109,6 +114,7 @@ while running:
         #play sound
         pygame.mixer.Sound.play(ew_sound)
         score -= 1
+        lives -= 1
         print(score)
     # draw more items
         add_enemies2(len(result))
@@ -118,18 +124,18 @@ while running:
         #play sound
         pygame.mixer.Sound.play(ew_sound)
         score -= 1
+        lives -= 1
         print(score)
     # draw more items
         add_enemies3(len(result))
         player.image = player.hurt
 
-    #check if any fish is off the screen
+    #check if any items is off the screen
     for shake in shakes:
         if shake.rect.y > 600:
             shakes.remove(shake)
             add_shake(1)
-            #fishes.add(Fish(random.randint(screen_width, screen_width + 50),
-                            #random.randint(0, screen_height - tile_size * 2)))
+
     for yogurt in yogurts:
         if yogurt.rect.y > 600:
             yogurts.remove(yogurt)
@@ -145,25 +151,90 @@ while running:
             enemies2.remove(enemy2)
             add_enemies2(1)
     for enemy3 in enemies3:
-        if enemy3.rect.x < 0:
+        if enemy3.rect.x < -600:
             enemies3.remove(enemy3)
             add_enemies3(1)
 
-#draw green fish
+
+#draw items
     shakes.draw(screen)
     enemies.draw(screen)
     yogurts.draw(screen)
     enemies2.draw(screen)
     enemies3.draw(screen)
-#draw player fish
-    player.draw(screen)
-    # draw score on screen
 
-    text = score_font.render(f'{score}', True, (255, 255, 255))
+
+#draw player
+    player.draw(screen)
+#create a font to give messages while player is playing
+    custom_font = pygame.font.Font('../assets/fonts/DERSIRA.ttf', 30)
+    # draw score on screen and make it change color depending on score
+    if score <0:
+        score=0
+        clock.tick(60)
+
+
+    elif score < 2:
+
+        clock.tick(60)
+        intro = custom_font.render('EAT HEALTHY FOODS AND AVOID JUNK FOOD', True, (255, 255, 255))
+        screen.blit(intro, (70, 550))
+
+
+    elif score <5:
+
+        text = score_font.render(f'{score}', True, (255, 255, 0))
+        clock.tick(65)
+    elif score <8:
+        text = score_font.render(f'{score}', True, (255, 255, 0))
+        clock.tick(70)
+    elif score <10:
+        text = score_font.render(f'{score}', True, (0, 255, 0))
+        clock.tick(75)
+    elif score <12:
+        text = score_font.render(f'{score}', True, (0, 255, 0))
+        clock.tick(80)
+    else:
+        text = score_font.render(f'{score}', True, (0, 255, 0))
+        clock.tick(100)
+
+
+# draws the score on the screen
     screen.blit(text, (screen_width/2, tile_size))
+# draw the number of lives on top of the screen
+    for i in range(lives):
+        screen.blit(player.small_celebratory_image, (i*20, 10))
 
     pygame.display.flip()
-    clock.tick(80)
+    #clock.tick(60)
 
-pygame.quit()
-sys.exit
+#CREATE NEW BACKGROUND WHEN GAME OVER
+screen.blit(background, (0, 0))
+
+
+#SHOW GAME OVER MESSAGE and FINAL SCORE
+draw_background2(background)
+screen.blit(background, (0, 0))
+#message = score_font.render('GAME OVER', True, (255,0,0))
+#screen.blit(message,(screen_width/2- message.get_width()/2, screen_height/2 - message.get_height()/2))
+score_text= score_font.render(f' Final Score: {score}', True, (255,0,0))
+screen.blit(score_text, (250,340))
+
+#update display
+
+pygame.display.flip()
+
+#WAIT FOR USER TO EXIT GAME
+run_background=True
+while run_background:
+    for event in pygame.event.get():
+
+        if event.type == pygame.QUIT:
+            pygame.quit()
+            sys.exit()
+        else:
+            if event.type == pygame.KEYDOWN:
+                if event.key== pygame.K_RIGHT:
+                    break
+
+

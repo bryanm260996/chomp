@@ -18,12 +18,15 @@ class Player(pygame.sprite.Sprite):
         self.rect.center= (0,0)
         self.x_speed=0
         self.y_speed=0
-        self.celebratory_image= self.image = pygame.image.load('../assets/sprites/player_cheer1.png').convert()
+        self.celebratory_image= pygame.image.load('../assets/sprites/player_cheer1.png').convert()
         self.celebratory_image.set_colorkey((0, 0, 0))
+        self.small_celebratory_image=  pygame.image.load('../assets/sprites/player_cheer_small.png').convert()
+        self.small_celebratory_image.set_colorkey((0, 0, 0))
         self.hurt=self.image = pygame.image.load('../assets/sprites/zombie_hurt.png').convert()
         self.hurt.set_colorkey((0, 0, 0))
-        self.climbing_image=self.image = pygame.image.load('../assets/sprites/player_climb1.png').convert()
+        self.climbing_image= pygame.image.load('../assets/sprites/player_climb1.png').convert()
         self.climbing_image.set_colorkey((0, 0, 0))
+
     def move_right(self):
         self.x_speed = 1*PLAYER_SPEED
         self.image = self.forward_image

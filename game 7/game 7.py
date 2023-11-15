@@ -37,9 +37,17 @@ text= score_font.render(f'{score}',True, (255,0,0))
 
 #load sound effects
 scream= pygame.mixer.Sound('../assets/sounds/chomp.wav')
+hurt= pygame.mixer.Sound('../assets/sounds/hurt.wav')
+bubbles= pygame.mixer.Sound('../assets/sounds/bubbles.wav')
+
+#ADD ALTERNATE FISH IMAGE
+life_icon= pygame.image.load('../assets/sprites/orange_fish_alt.png').convert()
+life_icon.set_colorkey((0,0,0))
+#SET NUMBER OF LIVES
+lives=NUM_LIVES
 
 
-while running:
+while lives > 0 and running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running=False
@@ -83,7 +91,8 @@ while running:
     result = pygame.sprite.spritecollide(player, enemies, True)
     if result: #if it is not empty
         #play sound
-        pygame.mixer.Sound.play(scream)
+        pygame.mixer.Sound.play(hurt)
+        lives-=1
         score -= len(result)
         print(score)
     # draw more  fish
@@ -106,11 +115,40 @@ while running:
 #draw player fish
     player.draw(screen)
     # draw score on screen
+
+#draw score
     text = score_font.render(f'{score}', True, (255, 0, 0))
     screen.blit(text, (screen_width - tile_size, 0))
+#draw lives in lower left corner
+    for i in range(lives):
+        screen.blit(life_icon, (i*tile_size, screen_height-tile_size))
 
     pygame.display.flip()
     clock.tick(80)
 
-pygame.quit()
-sys.exit
+
+#CREATE NEW BACKGROUND WHEN GAME OVER
+screen.blit(background, (0, 0))
+
+
+#SHOW GAME OVER MESSAGE and FINAL SCORE
+message = score_font.render('GAME OVER', True, (255,0,0))
+screen.blit(message,(screen_width/2- message.get_width()/2, screen_height/2 - message.get_height()/2))
+score_text= score_font.render(f'score{score}', True, (255,255,0))
+screen.blit(score_text, (screen_width/2- message.get_width()/2, screen_height/2 - message.get_height()/2))
+
+#update display
+
+pygame.display.flip()
+
+#WAIT FOR USER TO EXIT GAME
+
+while True:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            pygame.quit()
+            sys.exit()
+
+
+
+

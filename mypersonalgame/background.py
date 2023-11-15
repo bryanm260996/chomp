@@ -20,11 +20,21 @@ def draw_background(surf):
     surf.blit(text, (((screen_width/2)-tile_size*2.8) , (screen_height/2)-tile_size*4.5))
 
     # Draw a white rectangle at the bottom of the screen and a gray rectangle on top
-    white_bottom_rect = pygame.Rect(0, screen_height-100, screen_width, 200)
+    blue_bottom_rect = pygame.Rect(0, screen_height-100, screen_width, 200)
+    pygame.draw.rect(surf, (0, 13, 192), blue_bottom_rect)
+
+    gold_bottom_rect = pygame.Rect(0, screen_height-200, screen_width, 100)
+    pygame.draw.rect(surf, (255, 188, 0), gold_bottom_rect)
+
+def draw_background2(surf):
+    custom_font = pygame.font.Font('../assets/fonts/DERSIRA.ttf', 100)
+    white_bottom_rect = pygame.Rect(0, 0, screen_width, 800)
     pygame.draw.rect(surf, (255, 255, 255), white_bottom_rect)
 
-    gray_bottom_rect = pygame.Rect(0, screen_height-200, screen_width, 100)
-    pygame.draw.rect(surf, (240, 240, 240), gray_bottom_rect)
+    text = custom_font.render('GAME OVER', True, (255, 0, 0))
+    surf.blit(text, (100, 200))
+
+
 def add_shake (num_shake):
     for _ in range(num_shake):
         shakes.add(Shake(random.randint(10, 790),
@@ -49,3 +59,5 @@ def add_enemies3 (num_enemies3):
     for _ in range(num_enemies3):
         enemies3.add(Enemy3(random.randint(800,1000),
                         random.randint(400, 600)))
+
+

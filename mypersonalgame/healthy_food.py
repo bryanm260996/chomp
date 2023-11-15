@@ -23,12 +23,12 @@ class Shake(pygame.sprite.Sprite):
 class Yogurt(pygame.sprite.Sprite):
     def __init__(self, x, y):
         super().__init__()
-        self.image = pygame.image.load('../assets/sprites/oiko.jpg').convert()
-        self.image.set_colorkey((255, 255, 255))
+        self.image = pygame.image.load('../assets/sprites/oiko.png').convert()
+        self.image.set_colorkey((0, 0, 0))
         self.rect = self.image.get_rect()
         self.x = x
         self.y = y
-        self.speed = random.uniform(2.0, 3.0)
+        self.speed = random.uniform(1.0, 2.0)
         self.rect.center = (x, y)
     def update(self):
         self.y += self.speed
