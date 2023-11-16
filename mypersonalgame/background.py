@@ -30,9 +30,12 @@ def draw_background2(surf):
     custom_font = pygame.font.Font('../assets/fonts/DERSIRA.ttf', 100)
     white_bottom_rect = pygame.Rect(0, 0, screen_width, 800)
     pygame.draw.rect(surf, (255, 255, 255), white_bottom_rect)
+    custom_font_small= pygame.font.Font('../assets/fonts/DERSIRA.ttf', 50)
 
     text = custom_font.render('GAME OVER', True, (255, 0, 0))
-    surf.blit(text, (100, 200))
+    surf.blit(text, (80, 200))
+    play_again= custom_font_small.render("Press 'Y' to restart ", True, (255, 0, 0))
+    surf.blit(play_again, (190, 400))
 
 
 def add_shake (num_shake):
